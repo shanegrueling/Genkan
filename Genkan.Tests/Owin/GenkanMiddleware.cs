@@ -51,14 +51,12 @@ namespace Genkan.Tests.Owin
         {
             public Task WriteResponseAsync(Microsoft.Owin.IOwinResponse response)
             {
-                var result = Encoding.UTF8.GetBytes("This is a first test.");
-                response.Headers.Add("X-Genkan", new[] { "1" });
-                return response.Body.WriteAsync(result, 0, result.Length);
+                return response.WriteAsync("");
             }
         }
 
         [TestMethod]
-        public void TestGenkanIsActive()
+        public void TestInvoke()
         {
             var genkan = new TestGenkan();
             var testFactory = new TestRequestResponseFactory();
