@@ -1,6 +1,4 @@
 ﻿using Microsoft.Owin;
-using System;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Genkan.Owin

@@ -16,22 +16,29 @@ namespace Genkan.Tests.Owin
     {
         public class TestGenkan : IGenkan
         {
+            public IRequest Request = null;
+            public IResponse Response;
+
             public void Call<T>(IRequest request, ref T response) where T : IResponse
             {
-
+                Request = request;
+                Response = response;
             }
         }
 
         public class TestRequestResponseFactory : IRequestResponseFactory
         {
+            public IRequest Request = new TestRequest();
+            public Genkan.Owin.IOwinResponse Response = new TestOwinResponse();
+
             public IRequest GetRequest(IOwinRequest request)
             {
-                return new TestRequest();
+                return Request;
             }
 
             public Genkan.Owin.IOwinResponse GetResponse(IOwinRequest request)
             {
-                return new TestOwinResponse();
+                return Response;
             }
         }
 
@@ -53,13 +60,17 @@ namespace Genkan.Tests.Owin
         [TestMethod]
         public void TestGenkanIsActive()
         {
+            var genkan = new TestGenkan();
+            var testFactory = new TestRequestResponseFactory();
             using (var server = TestServer.Create(app =>
             {
-                app.Use(typeof(Genkan.Owin.GenkanMiddleware), new TestGenkan(), new TestRequestResponseFactory());
+                app.Use(typeof(Genkan.Owin.GenkanMiddleware), genkan, testFactory);
             }))
             {
                 HttpResponseMessage response = server.HttpClient.GetAsync("/?interface=Foo&method=bar").Result;
-                Assert.IsTrue(response.Headers.Contains("X-Genkan"));
+
+                Assert.IsTrue(genkan.Request == testFactory.Request);
+                Assert.IsTrue(genkan.Response == testFactory.Response);
             }
         }
     }
