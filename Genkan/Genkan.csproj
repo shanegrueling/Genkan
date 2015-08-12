@@ -52,6 +52,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IGenkan.cs" />
+    <Compile Include="IRequest.cs" />
+    <Compile Include="Owin\IOwinResponse.cs" />
+    <Compile Include="Owin\IRequestResponseFactory.cs" />
+    <Compile Include="IResponse.cs" />
     <Compile Include="Owin\GenkanMiddleware.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
