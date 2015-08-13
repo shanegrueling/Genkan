@@ -75,7 +75,7 @@ namespace Genkan.Tests.Owin
             var genkanMiddleware = new Genkan.Owin.GenkanMiddleware(null, null, testFactory);
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        [TestMethod, ExpectedException(typeof(ArgumentNullException), "context")]
         public void TestInvokeNull()
         {
             var genkan = new TestGenkan();
