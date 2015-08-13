@@ -13,7 +13,7 @@ namespace Genkan.Owin
         : base(next)
         {
             if (genkan == null) throw new ArgumentNullException(nameof(genkan));
-            if (genkan == requestResponseFactory) throw new ArgumentNullException(nameof(requestResponseFactory));
+            if (requestResponseFactory == null) throw new ArgumentNullException(nameof(requestResponseFactory));
 
             _requestResponseFactory = requestResponseFactory;
             _genkan = genkan;

@@ -14,7 +14,7 @@ namespace Genkan.Tests.Owin
     [TestClass]
     public class GenkanMiddleware
     {
-        public class TestGenkan : IGenkan
+        class TestGenkan : IGenkan
         {
             public IRequest Request = null;
             public IResponse Response;
@@ -26,7 +26,7 @@ namespace Genkan.Tests.Owin
             }
         }
 
-        public class TestRequestResponseFactory : IRequestResponseFactory
+        class TestRequestResponseFactory : IRequestResponseFactory
         {
             public IRequest Request = new TestRequest();
             public Genkan.Owin.IOwinResponse Response = new TestOwinResponse();
@@ -42,17 +42,47 @@ namespace Genkan.Tests.Owin
             }
         }
 
-        public class TestRequest : IRequest
+        class TestRequest : IRequest
         {
 
         }
 
-        public class TestOwinResponse : Genkan.Owin.IOwinResponse
+        class TestOwinResponse : Genkan.Owin.IOwinResponse
         {
             public Task WriteResponseAsync(Microsoft.Owin.IOwinResponse response)
             {
                 return response.WriteAsync("");
             }
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void TestConstructorNull()
+        {
+            var genkanMiddleware = new Genkan.Owin.GenkanMiddleware(null, null, null);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException), "requestResponseFactory")]
+        public void TestConstructorIRequestResponseFactoryNull()
+        {
+            var genkan = new TestGenkan();
+            var genkanMiddleware = new Genkan.Owin.GenkanMiddleware(null, genkan, null);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException), "genkan")]
+        public void TestConstructorIGenkanNull()
+        {
+            var testFactory = new TestRequestResponseFactory();
+            var genkanMiddleware = new Genkan.Owin.GenkanMiddleware(null, null, testFactory);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void TestInvokeNull()
+        {
+            var genkan = new TestGenkan();
+            var testFactory = new TestRequestResponseFactory();
+            var genkanMiddleware = new Genkan.Owin.GenkanMiddleware(null, genkan, testFactory);
+
+            genkanMiddleware.Invoke(null);
         }
 
         [TestMethod]
@@ -67,8 +97,8 @@ namespace Genkan.Tests.Owin
             {
                 HttpResponseMessage response = server.HttpClient.GetAsync("/?interface=Foo&method=bar").Result;
 
-                Assert.IsTrue(genkan.Request == testFactory.Request);
-                Assert.IsTrue(genkan.Response == testFactory.Response);
+                Assert.AreSame(genkan.Request, testFactory.Request);
+                Assert.AreSame(genkan.Response, testFactory.Response);
             }
         }
     }
