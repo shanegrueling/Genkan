@@ -52,9 +52,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Genkan.cs" />
+    <Compile Include="Tobira.cs" />
     <Compile Include="IApiDiscoverer.cs" />
-    <Compile Include="IGenkan.cs" />
+    <Compile Include="ITobira.cs" />
     <Compile Include="IRequest.cs" />
     <Compile Include="Owin\IOwinResponse.cs" />
     <Compile Include="Owin\IRequestResponseFactory.cs" />

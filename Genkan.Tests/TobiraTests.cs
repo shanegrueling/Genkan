@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Genkan.Tests.Owin
 {
     [TestClass()]
-    public class GenkanTests
+    public class TobiraTests
     {
         class TestApiDiscoverer : IApiDiscoverer
         {
