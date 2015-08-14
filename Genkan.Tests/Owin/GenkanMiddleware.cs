@@ -3,18 +3,15 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Owin.Testing;
 using System.Net.Http;
 using System;
-using System.Collections.Generic;
-using System.Reflection;
 using Microsoft.Owin;
 using System.Threading.Tasks;
-using System.Text;
 
 namespace Genkan.Tests.Owin
 {
     [TestClass]
     public class GenkanMiddleware
     {
-        class TestGenkan : IGenkan
+        class TestTobira : ITobira
         {
             public IRequest Request = null;
             public IResponse Response;
@@ -83,7 +80,7 @@ namespace Genkan.Tests.Owin
             }
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        [TestMethod, ExpectedException(typeof(ArgumentNullException), "tobira")]
         public void TestConstructorNull()
         {
             var genkanMiddleware = new Genkan.Owin.GenkanMiddleware(null, null, null);
@@ -92,12 +89,12 @@ namespace Genkan.Tests.Owin
         [TestMethod, ExpectedException(typeof(ArgumentNullException), "requestResponseFactory")]
         public void TestConstructorIRequestResponseFactoryNull()
         {
-            var genkan = new TestGenkan();
-            var genkanMiddleware = new Genkan.Owin.GenkanMiddleware(null, genkan, null);
+            var tobira = new TestTobira();
+            var genkanMiddleware = new Genkan.Owin.GenkanMiddleware(null, tobira, null);
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentNullException), "genkan")]
-        public void TestConstructorIGenkanNull()
+        [TestMethod, ExpectedException(typeof(ArgumentNullException), "tobira")]
+        public void TestConstructorITobiraNull()
         {
             var testFactory = new TestRequestResponseFactory();
             var genkanMiddleware = new Genkan.Owin.GenkanMiddleware(null, null, testFactory);
@@ -106,9 +103,9 @@ namespace Genkan.Tests.Owin
         [TestMethod, ExpectedException(typeof(ArgumentNullException), "context")]
         public void TestInvokeNull()
         {
-            var genkan = new TestGenkan();
+            var tobira = new TestTobira();
             var testFactory = new TestRequestResponseFactory();
-            var genkanMiddleware = new Genkan.Owin.GenkanMiddleware(null, genkan, testFactory);
+            var genkanMiddleware = new Genkan.Owin.GenkanMiddleware(null, tobira, testFactory);
 
             genkanMiddleware.Invoke(null);
         }
@@ -116,17 +113,17 @@ namespace Genkan.Tests.Owin
         [TestMethod]
         public void TestInvoke()
         {
-            var genkan = new TestGenkan();
+            var tobira = new TestTobira();
             var testFactory = new TestRequestResponseFactory();
             using (var server = TestServer.Create(app =>
             {
-                app.Use(typeof(Genkan.Owin.GenkanMiddleware), genkan, testFactory);
+                app.Use(typeof(Genkan.Owin.GenkanMiddleware), tobira, testFactory);
             }))
             {
                 HttpResponseMessage response = server.HttpClient.GetAsync("/?interface=Foo&method=bar").Result;
 
-                Assert.AreSame(genkan.Request, testFactory.Request);
-                Assert.AreSame(genkan.Response, testFactory.Response);
+                Assert.AreSame(tobira.Request, testFactory.Request);
+                Assert.AreSame(tobira.Response, testFactory.Response);
             }
         }
     }

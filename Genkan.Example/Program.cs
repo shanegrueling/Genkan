@@ -38,11 +38,11 @@ namespace Genkan.Example
     {
         public void Configuration(IAppBuilder app)
         {
-            app.Use(typeof(Owin.GenkanMiddleware), new TestGenkan(), new TestRequestResponseFactory());
+            app.Use(typeof(GenkanMiddleware), new TestTobira(), new TestRequestResponseFactory());
         }
     }
 
-    public class TestGenkan : IGenkan
+    public class TestTobira : ITobira
     {
         public void Call(IRequest request, IResponse response)
         {

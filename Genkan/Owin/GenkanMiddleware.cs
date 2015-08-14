@@ -6,17 +6,17 @@ namespace Genkan.Owin
 {
     public class GenkanMiddleware : OwinMiddleware
     {
-        private IGenkan _genkan;
+        private ITobira _tobira;
         private IRequestResponseFactory _requestResponseFactory;
 
-        public GenkanMiddleware(OwinMiddleware next, IGenkan genkan, IRequestResponseFactory requestResponseFactory)
+        public GenkanMiddleware(OwinMiddleware next, ITobira tobira, IRequestResponseFactory requestResponseFactory)
         : base(next)
         {
-            if (genkan == null) throw new ArgumentNullException(nameof(genkan));
+            if (tobira == null) throw new ArgumentNullException(nameof(tobira));
             if (requestResponseFactory == null) throw new ArgumentNullException(nameof(requestResponseFactory));
 
             _requestResponseFactory = requestResponseFactory;
-            _genkan = genkan;
+            _tobira = tobira;
         }
 
         public override Task Invoke(IOwinContext context)
@@ -24,7 +24,7 @@ namespace Genkan.Owin
             if (context == null) throw new ArgumentNullException(nameof(context));
 
             var response = _requestResponseFactory.GetResponse(context.Request);
-            _genkan.Call(
+            _tobira.Call(
                 _requestResponseFactory.GetRequest(context.Request),
                 response
                 );

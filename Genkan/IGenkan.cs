@@ -1,6 +1,6 @@
 ﻿namespace Genkan
 {
-    public interface IGenkan
+    public interface ITobira
     {
         void Call(IRequest request, IResponse response);
     }
