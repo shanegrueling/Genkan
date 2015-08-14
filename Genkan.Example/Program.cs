@@ -44,7 +44,7 @@ namespace Genkan.Example
 
     public class TestGenkan : IGenkan
     {
-        public void Call<T>(IRequest request, ref T response) where T : IResponse
+        public void Call(IRequest request, IResponse response)
         {
             
         }
@@ -65,11 +65,34 @@ namespace Genkan.Example
 
     public class TestRequest : IRequest
     {
+        public string GetControllerName()
+        {
+            throw new NotImplementedException();
+        }
 
+        public string GetMethodName()
+        {
+            throw new NotImplementedException();
+        }
+
+        public T GetParameter<T>(string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        public T GetParameter<T>(int i)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class TestOwinResponse : Owin.IOwinResponse
     {
+        public void SetResult(object result)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task WriteResponseAsync(Microsoft.Owin.IOwinResponse response)
         {
             var result = Encoding.UTF8.GetBytes("This is a first test.");

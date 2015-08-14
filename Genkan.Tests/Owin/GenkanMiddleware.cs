@@ -19,10 +19,15 @@ namespace Genkan.Tests.Owin
             public IRequest Request = null;
             public IResponse Response;
 
-            public void Call<T>(IRequest request, ref T response) where T : IResponse
+            public void Call(IRequest request, IResponse response)
             {
                 Request = request;
                 Response = response;
+            }
+
+            public void Call<T>(IRequest request, ref T response) where T : IResponse
+            {
+                
             }
         }
 
@@ -44,11 +49,34 @@ namespace Genkan.Tests.Owin
 
         class TestRequest : IRequest
         {
+            public string GetControllerName()
+            {
+                throw new NotImplementedException();
+            }
 
+            public string GetMethodName()
+            {
+                throw new NotImplementedException();
+            }
+
+            public T GetParameter<T>(string name)
+            {
+                throw new NotImplementedException();
+            }
+
+            public T GetParameter<T>(int i)
+            {
+                throw new NotImplementedException();
+            }
         }
 
         class TestOwinResponse : Genkan.Owin.IOwinResponse
         {
+            public void SetResult(object result)
+            {
+                throw new NotImplementedException();
+            }
+
             public Task WriteResponseAsync(Microsoft.Owin.IOwinResponse response)
             {
                 return response.WriteAsync("");

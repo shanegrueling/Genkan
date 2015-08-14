@@ -52,6 +52,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Genkan.cs" />
+    <Compile Include="IApiDiscoverer.cs" />
     <Compile Include="IGenkan.cs" />
     <Compile Include="IRequest.cs" />
     <Compile Include="Owin\IOwinResponse.cs" />

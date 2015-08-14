@@ -2,6 +2,6 @@
 {
     public interface IGenkan
     {
-        void Call<T>(IRequest request, ref T response) where T : IResponse;
+        void Call(IRequest request, IResponse response);
     }
 }

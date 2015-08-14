@@ -2,5 +2,6 @@
 {
     public interface IResponse
     {
+        void SetResult(object result);
     }
 }

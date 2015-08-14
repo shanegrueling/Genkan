@@ -26,7 +26,7 @@ namespace Genkan.Owin
             var response = _requestResponseFactory.GetResponse(context.Request);
             _genkan.Call(
                 _requestResponseFactory.GetRequest(context.Request),
-                ref response
+                response
                 );
 
             return response.WriteResponseAsync(context.Response);
