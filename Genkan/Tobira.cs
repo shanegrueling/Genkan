@@ -22,6 +22,7 @@ namespace Genkan
             var methodName = request.GetMethodName();
 
             var invoke = _apiDiscoverer.Resolve(controllerName, methodName);
+
             var result = invoke(request);
 
             response.SetResult(result);

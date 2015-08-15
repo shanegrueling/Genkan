@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MethodInfo.cs" />
     <Compile Include="Tobira.cs" />
     <Compile Include="IApiDiscoverer.cs" />
     <Compile Include="ITobira.cs" />
