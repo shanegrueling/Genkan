@@ -21,11 +21,39 @@ namespace Genkan
             var controllerName = request.GetControllerName();
             var methodName = request.GetMethodName();
 
-            var invoke = _apiDiscoverer.Resolve(controllerName, methodName);
+            var methodInfo = _apiDiscoverer.Resolve(controllerName, methodName);
 
-            var result = invoke(request);
+            if(!PreCallCheck(methodInfo, request, response))
+            {
+                return;
+            }
 
+            var result = GetCallMethod(methodInfo)(request);
             response.SetResult(result);
+
+            if (!PostCallCheck(methodInfo, request, response))
+            {
+                return;
+            }
+        }
+
+        private bool PreCallCheck(RPCInfo method, IRequest request, IResponse response)
+        {
+            return true;
+        }
+
+        private bool PostCallCheck(RPCInfo method, IRequest request, IResponse response)
+        {
+            return true;
+        }
+
+        private Func<IRequest, object> GetCallMethod(RPCInfo info)
+        {
+            return req =>
+            {
+                return info.Method.Invoke(info.Controller, req.GetParameters());
+            };
+
         }
     }
 }

@@ -7,5 +7,6 @@
 
         T GetParameter<T>(int i);
         T GetParameter<T>(string name);
+        object[] GetParameters();
     }
 }

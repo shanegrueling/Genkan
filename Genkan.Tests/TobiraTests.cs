@@ -1,10 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Genkan;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Genkan.Tests.Owin
 {
@@ -13,9 +8,21 @@ namespace Genkan.Tests.Owin
     {
         class TestApiDiscoverer : IApiDiscoverer
         {
-            public Func<IRequest, object> Resolve(string controllerName, string methodName)
+            public RPCInfo Resolve(string controllerName, string methodName)
             {
-                return r => { return true; };
+                var testController = new TestController();
+
+                var methodInfo = testController.GetType().GetMethod("TestMethod");
+                var info = new RPCInfo(testController, methodInfo);
+                return info;
+            }
+        }
+
+        class TestController
+        {
+            public bool TestMethod()
+            {
+                return true;
             }
         }
 
@@ -39,6 +46,11 @@ namespace Genkan.Tests.Owin
             public T GetParameter<T>(int i)
             {
                 throw new NotImplementedException();
+            }
+
+            public object[] GetParameters()
+            {
+                return new object[0];
             }
         }
 
@@ -69,7 +81,9 @@ namespace Genkan.Tests.Owin
 
             tobira.Call(request, response);
 
-            Assert.AreEqual(apiDiscoverer.Resolve(request.GetControllerName(), request.GetMethodName())(request), response.Result);
+            var info = apiDiscoverer.Resolve(request.GetControllerName(), request.GetMethodName());
+
+            Assert.AreEqual(((TestController)info.Controller).TestMethod(), response.Result);
         }
     }
 }

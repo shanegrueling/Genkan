@@ -65,6 +65,11 @@ namespace Genkan.Tests.Owin
             {
                 throw new NotImplementedException();
             }
+
+            public object[] GetParameters()
+            {
+                throw new NotImplementedException();
+            }
         }
 
         class TestOwinResponse : Genkan.Owin.IOwinResponse
