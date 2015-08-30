@@ -12,7 +12,7 @@ namespace Genkan.Tests.Owin
             {
                 var testController = new TestController();
 
-                var methodInfo = testController.GetType().GetMethod("TestMethod");
+                var methodInfo = testController.GetType().GetMethod(methodName);
                 var info = new RPCInfo(testController, methodInfo);
                 return info;
             }
@@ -24,18 +24,34 @@ namespace Genkan.Tests.Owin
             {
                 return true;
             }
+
+            public int TestMethodInt(int i)
+            {
+                return i;
+            }
         }
 
         class TestRequest : IRequest
         {
+            public TestRequest(string controller, string method, object[] parameters)
+            {
+                Controller = controller;
+                Method = method;
+                Parameters = parameters;
+            }
+
+            public string Controller { get; private set; }
+            public string Method { get; private set; }
+            public object[] Parameters { get; private set; }
+
             public string GetControllerName()
             {
-                return "Test";
+                return Controller;
             }
 
             public string GetMethodName()
             {
-                return "Test";
+                return Method;
             }
 
             public T GetParameter<T>(string name)
@@ -50,7 +66,7 @@ namespace Genkan.Tests.Owin
 
             public object[] GetParameters()
             {
-                return new object[0];
+                return Parameters;
             }
         }
 
@@ -76,14 +92,14 @@ namespace Genkan.Tests.Owin
 
             var tobira = new Tobira(apiDiscoverer);
 
-            var request = new TestRequest();
+            var request = new TestRequest("TestController", "TestMethodInt", new object[] { 1 } );
             var response = new TestResponse();
 
             tobira.Call(request, response);
 
             var info = apiDiscoverer.Resolve(request.GetControllerName(), request.GetMethodName());
 
-            Assert.AreEqual(((TestController)info.Controller).TestMethod(), response.Result);
+            Assert.AreEqual(((TestController)info.Controller).TestMethodInt(1), response.Result);
         }
     }
 }
