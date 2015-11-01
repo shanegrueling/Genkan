@@ -1,4 +1,6 @@
-﻿namespace Genkan
+﻿using System.Reflection;
+
+namespace Genkan
 {
     public interface IRequest
     {
@@ -8,5 +10,6 @@
         T GetParameter<T>(int i);
         T GetParameter<T>(string name);
         object[] GetParameters();
+        object[] GetParameters(ParameterInfo[] parameterInfo);
     }
 }

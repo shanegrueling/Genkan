@@ -5,6 +5,7 @@ using System.Net.Http;
 using System;
 using Microsoft.Owin;
 using System.Threading.Tasks;
+using System.Reflection;
 
 namespace Genkan.Tests.Owin
 {
@@ -20,11 +21,6 @@ namespace Genkan.Tests.Owin
             {
                 Request = request;
                 Response = response;
-            }
-
-            public void Call<T>(IRequest request, ref T response) where T : IResponse
-            {
-                
             }
         }
 
@@ -67,6 +63,11 @@ namespace Genkan.Tests.Owin
             }
 
             public object[] GetParameters()
+            {
+                throw new NotImplementedException();
+            }
+
+            public object[] GetParameters(ParameterInfo[] parameterInfo)
             {
                 throw new NotImplementedException();
             }

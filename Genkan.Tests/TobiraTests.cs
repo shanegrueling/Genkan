@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Reflection;
 
 namespace Genkan.Tests.Owin
 {
@@ -27,7 +28,22 @@ namespace Genkan.Tests.Owin
 
             public int TestMethodInt(int i)
             {
-                return i;
+                return i * 3;
+            }
+
+            public string TestMethodString(string s)
+            {
+                return s+" World!";
+            }
+
+            public string TestMethodTwoParameter(string s, string s2)
+            {
+                return s + " " + s2;
+            }
+
+            public int TestMethodIntArray(int[] i)
+            {
+                return i[0] * i[1];
             }
         }
 
@@ -61,10 +77,15 @@ namespace Genkan.Tests.Owin
 
             public T GetParameter<T>(int i)
             {
-                throw new NotImplementedException();
+                return (T)Parameters[i];
             }
 
             public object[] GetParameters()
+            {
+                return Parameters;
+            }
+
+            public object[] GetParameters(ParameterInfo[] parameterInfo)
             {
                 return Parameters;
             }
@@ -100,6 +121,57 @@ namespace Genkan.Tests.Owin
             var info = apiDiscoverer.Resolve(request.GetControllerName(), request.GetMethodName());
 
             Assert.AreEqual(((TestController)info.Controller).TestMethodInt(1), response.Result);
+        }
+
+        [TestMethod()]
+        public void TestCallString()
+        {
+            var apiDiscoverer = new TestApiDiscoverer();
+
+            var tobira = new Tobira(apiDiscoverer);
+
+            var request = new TestRequest("TestController", "TestMethodString", new object[] { "Hello" });
+            var response = new TestResponse();
+
+            tobira.Call(request, response);
+
+            var info = apiDiscoverer.Resolve(request.GetControllerName(), request.GetMethodName());
+
+            Assert.AreEqual(((TestController)info.Controller).TestMethodString("Hello"), response.Result);
+        }
+
+        [TestMethod()]
+        public void TestCallTwoParameter()
+        {
+            var apiDiscoverer = new TestApiDiscoverer();
+
+            var tobira = new Tobira(apiDiscoverer);
+
+            var request = new TestRequest("TestController", "TestMethodTwoParameter", new object[] { "Hello", "Two Parameter" });
+            var response = new TestResponse();
+
+            tobira.Call(request, response);
+
+            var info = apiDiscoverer.Resolve(request.GetControllerName(), request.GetMethodName());
+
+            Assert.AreEqual(((TestController)info.Controller).TestMethodTwoParameter("Hello", "Two Parameter"), response.Result);
+        }
+
+        [TestMethod()]
+        public void TestCallIntArray()
+        {
+            var apiDiscoverer = new TestApiDiscoverer();
+
+            var tobira = new Tobira(apiDiscoverer);
+
+            var request = new TestRequest("TestController", "TestMethodIntArray", new object[] { new[] { 2, 2 } });
+            var response = new TestResponse();
+
+            tobira.Call(request, response);
+
+            var info = apiDiscoverer.Resolve(request.GetControllerName(), request.GetMethodName());
+
+            Assert.AreEqual(((TestController)info.Controller).TestMethodIntArray(new[] { 2, 2 }), response.Result);
         }
     }
 }

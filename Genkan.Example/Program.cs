@@ -2,13 +2,8 @@
 using Microsoft.Owin.Hosting;
 using Owin;
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Reflection;
-using Microsoft.Owin;
-using System.Threading.Tasks;
-using System.Text;
 
 namespace Genkan.Example
 {
@@ -22,10 +17,10 @@ namespace Genkan.Example
 
             HttpClient client = new HttpClient();
 
-            StringContent queryString = new StringContent(@"'['asdasdasd',{'a':123,'b':'Asdasd'}]'");
+            StringContent queryString = new StringContent(@"['asdasdasd']");
             queryString.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-            var response = client.PostAsync(baseAddress + "/?interface=Foo&method=bar", queryString).Result;
+            var response = client.PostAsync(baseAddress + "/?interface=Test&method=Hello", queryString).Result;
 
             Console.WriteLine(response);
             Console.WriteLine(response.Content.ReadAsStringAsync().Result);
@@ -38,71 +33,7 @@ namespace Genkan.Example
     {
         public void Configuration(IAppBuilder app)
         {
-            app.Use(typeof(GenkanMiddleware), new TestTobira(), new TestRequestResponseFactory());
-        }
-    }
-
-    public class TestTobira : ITobira
-    {
-        public void Call(IRequest request, IResponse response)
-        {
-            
-        }
-    }
-
-    public class TestRequestResponseFactory : IRequestResponseFactory
-    {
-        public IRequest GetRequest(IOwinRequest request)
-        {
-            return new TestRequest();
-        }
-
-        public Owin.IOwinResponse GetResponse(IOwinRequest request)
-        {
-            return new TestOwinResponse();
-        }
-    }
-
-    public class TestRequest : IRequest
-    {
-        public string GetControllerName()
-        {
-            throw new NotImplementedException();
-        }
-
-        public string GetMethodName()
-        {
-            throw new NotImplementedException();
-        }
-
-        public T GetParameter<T>(string name)
-        {
-            throw new NotImplementedException();
-        }
-
-        public T GetParameter<T>(int i)
-        {
-            throw new NotImplementedException();
-        }
-
-        public object[] GetParameters()
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    public class TestOwinResponse : Owin.IOwinResponse
-    {
-        public void SetResult(object result)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task WriteResponseAsync(Microsoft.Owin.IOwinResponse response)
-        {
-            var result = Encoding.UTF8.GetBytes("This is a first test.");
-            response.Headers.Add("X-Genkan", new[] { "1" });
-            return response.Body.WriteAsync(result, 0, result.Length);
+            app.Use(typeof(GenkanMiddleware), new Tobira(new ApiDiscoverer()), new Owin.Json.Factory());
         }
     }
 }
