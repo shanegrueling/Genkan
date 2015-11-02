@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
 
 namespace Genkan.Owin.Json
 {
@@ -15,6 +10,12 @@ namespace Genkan.Owin.Json
         private string _methodName;
         private JArray _parameter;
 
+        /// <summary>
+        /// Creates a Request object and prepares the internal state.
+        /// </summary>
+        /// <param name="controllerName">The name of the controller to call</param>
+        /// <param name="methodName">The name of the method to call.</param>
+        /// <param name="parameter">The JArray containg the parameter given from the client.</param>
         public Request(string controllerName, string methodName, JArray parameter)
         {
             _controllerName = controllerName;
@@ -26,7 +27,7 @@ namespace Genkan.Owin.Json
         {
             return _controllerName;
         }
-
+        
         public string GetMethodName()
         {
             return _methodName;
@@ -34,7 +35,7 @@ namespace Genkan.Owin.Json
 
         public T GetParameter<T>(string name)
         {
-            throw new NotImplementedException();
+            return _parameter[name].ToObject<T>();
         }
 
         public T GetParameter<T>(int i)
@@ -42,14 +43,17 @@ namespace Genkan.Owin.Json
             return _parameter[i].ToObject<T>();
         }
 
-        public object[] GetParameters()
+        public object[] GetParameters(Type[] types)
         {
-            throw new NotImplementedException();
-        }
+            var o = new List<object>();
+            var i = 0;
+            foreach(var t in types)
+            {
+                o.Add(_parameter[i].ToObject(t));
+                ++i;
+            }
 
-        public object[] GetParameters(ParameterInfo[] parameterInfo)
-        {
-            throw new NotImplementedException();
+            return o.ToArray();
         }
     }
 }

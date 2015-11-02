@@ -62,12 +62,7 @@ namespace Genkan.Tests.Owin
                 throw new NotImplementedException();
             }
 
-            public object[] GetParameters()
-            {
-                throw new NotImplementedException();
-            }
-
-            public object[] GetParameters(ParameterInfo[] parameterInfo)
+            public object[] GetParameters(Type[] parameterInfo)
             {
                 throw new NotImplementedException();
             }

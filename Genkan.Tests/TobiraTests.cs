@@ -80,12 +80,7 @@ namespace Genkan.Tests.Owin
                 return (T)Parameters[i];
             }
 
-            public object[] GetParameters()
-            {
-                return Parameters;
-            }
-
-            public object[] GetParameters(ParameterInfo[] parameterInfo)
+            public object[] GetParameters(Type[] parameterInfo)
             {
                 return Parameters;
             }
