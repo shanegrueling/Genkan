@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.Owin;
+﻿using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace Genkan.Owin.Json
