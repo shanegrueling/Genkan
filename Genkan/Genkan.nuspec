@@ -6,7 +6,7 @@
     <title>$title$</title>
     <authors>$author$</authors>
     <owners>$author$</owners>
-    <licenseUrl>https://github.com/shanegrueling/Genkan/LICENSE</licenseUrl>
+    <licenseUrl>https://github.com/shanegrueling/Genkan/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/shanegrueling/Genkan</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
